@@ -1,0 +1,89 @@
+<div class="content">
+  <!-- toolBar -->
+  <div class="toolBar">
+    <img src="../assets/logo.jpg">
+  </div>
+  <div class="container">
+    <div class="card-container small-card">
+      <div class="card highlight-card small-card-header">
+        <div>Make a Transfer</div>
+      </div>
+      <div class="transferDetails" *ngIf="!preview">
+        <div class="inputClass">
+          <div>FROM ACCOUNT</div>
+          <div><input type="text" name="fromAccountId" disabled [(ngModel)]="fromAccount"></div>
+        </div>
+        <div class="inputClass">
+          <div>TO ACCOUNT</div>
+          <div><input type="text" name='toAccountId' [(ngModel)]="toAccount"><span style="color: red;">*</span></div>
+        </div>
+        <div class="inputClass">
+          <div>AMOUNT</div>
+          <div><input type="text" name='amountId' [(ngModel)]="amount"><span style="color: red;">*</span></div>
+        </div>
+        <div class="inputClass">
+          <button (click)="submitClick()" name="submitButton" class="actionButton">Submit</button>
+        </div>
+        <div [ngClass]="getClass()" name="validationId" *ngIf="validationMessage != ''">
+          {{validationMessage}}
+        </div>
+      </div>
+
+      <div class="transferDetails" *ngIf="preview">
+        <div class="inputClass">
+          <div>FROM ACCOUNT</div>
+          <div>{{fromAccount}}</div>
+        </div>
+        <div class="inputClass">
+          <div>TO ACCOUNT</div>
+          <div>{{toAccount}}</div>
+        </div>
+        <div class="inputClass">
+          <div>AMOUNT</div>
+          <div>{{amount}}</div>
+        </div>
+        <div class="inputClass">
+          <div><button name="transferButton" (click)="transferClick()" class="actionButton">Transfer</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-container big-card">
+      <div class="card highlight-card big-card-header">
+
+        <div class="transHeader">Recent Transactions</div>
+      </div>
+      <div class="card highlight-card big-card-header searchBar">
+        <div class="searchField">
+          <input [(ngModel)]="searchText" placeholder="Search by typing" type="search">
+        </div>
+        <div class="buttonSection">
+          <label class="sortLabel">Sort by</label>
+          <button (click)="sortingList('date')" class="action">
+            DATE <img *ngIf="dateSortImagePath != ''" [src]="dateSortImagePath"></button>
+          <button (click)="sortingList('merchantName')" class="action">
+            BENEFICIARY <img *ngIf="merchantSortImagePath != ''" [src]="merchantSortImagePath"></button>
+          <button (click)="sortingList('amount')" class="action">
+            AMOUNT <img *ngIf="amountSortImagePath != ''" [src]="amountSortImagePath"></button>
+        </div>
+      </div>
+      <div class="tableContent">
+        <table>
+          <tbody>
+            <ng-container
+              *ngFor="let row of transactionList | filtergrid: {date:searchText, amount:searchText, merchantName:searchText, imagePath:searchText}; let i=index">
+              <tr>
+                <td [style.border-left]="row.border">{{row.date | date:'MMM d'}}</td>
+                <td><img id="myImg" [src]="row.imagePath" class="tableImage"></td>
+                <td>
+                  <div>{{row.merchantName}}</div>
+                  <div>{{row.type}}</div>
+                </td>
+                <td>{{row.amount}}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
